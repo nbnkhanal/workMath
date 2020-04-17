@@ -9,7 +9,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.workMath.Entity.Fields;
 import com.example.workMath.Repository.FieldNameRepository;
+import com.example.workMath.constants.WMConstants;
 import com.example.workMath.saveName.SaveName;
+import com.example.workMath.util.DataSanitazationUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @RestController
@@ -29,12 +31,12 @@ public class FieldsName {
 	@RequestMapping(value = "/npb/saveName", method = RequestMethod.POST)
 	public ResponseEntity<Object> create(@RequestBody Fields field) throws Exception{
 		String result = null;
+		String name = field.getName();
+		if(!(name.matches(WMConstants.NamePattern))) {
+			return DataSanitazationUtil.invalidPayloadRequest();
+		}
 		result = mapper.writeValueAsString(fieldNameRepository.save(field));
 		return SaveName.responseStripXss(result);
-		
-		
-//		return null;
 	}
-
 }
 

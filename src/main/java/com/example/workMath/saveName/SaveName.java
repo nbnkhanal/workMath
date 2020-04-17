@@ -28,6 +28,8 @@ public class SaveName {
 			value = value.replaceAll("\0", "");
 			value = org.jsoup.Jsoup.clean(value, org.jsoup.safety.Whitelist.none());
 			sanitizedResp = JsonSanitizer.sanitize(value).replaceAll("&amp;", "&");
+			sanitizedResp = JsonSanitizer.sanitize(value).replaceAll("&", "");
+			sanitizedResp = JsonSanitizer.sanitize(value).replaceAll("quot;", "");
 			sanitizedRespData = sanitizedResp;
 		}
 		return new ResponseEntity<>(sanitizedRespData, HttpStatus.OK);
