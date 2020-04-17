@@ -12,6 +12,7 @@ import com.example.workMath.Repository.FieldNameRepository;
 import com.example.workMath.constants.WMConstants;
 import com.example.workMath.saveName.SaveName;
 import com.example.workMath.util.DataSanitazationUtil;
+import com.example.workMath.util.RegexValidator;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @RestController
@@ -23,16 +24,32 @@ public class FieldsName {
 	@Autowired
 	FieldNameRepository fieldNameRepository;
 	
+	@Autowired
+	RegexValidator rv;
+	
 //	@RequestMapping(value = "/npb/saveName", method = RequestMethod.POST)
 //	public void create(@RequestBody Fields field) {
 //		fieldNameRepository.save(field);
+//	}
+	
+//	@RequestMapping(value = "/npb/saveName", method = RequestMethod.POST)
+//	public ResponseEntity<Object> create(@RequestBody Fields field) throws Exception{
+//		String result = null;
+//		String name = field.getName();
+//		if(!(name.matches(WMConstants.NamePattern))) {
+//			return DataSanitazationUtil.invalidPayloadRequest();
+//		}
+//		result = mapper.writeValueAsString(fieldNameRepository.save(field));
+//		return SaveName.responseStripXss(result);
 //	}
 	
 	@RequestMapping(value = "/npb/saveName", method = RequestMethod.POST)
 	public ResponseEntity<Object> create(@RequestBody Fields field) throws Exception{
 		String result = null;
 		String name = field.getName();
-		if(!(name.matches(WMConstants.NamePattern))) {
+		String s = rv.regexProp();
+		if(!(name.matches(s))) {
+			
 			return DataSanitazationUtil.invalidPayloadRequest();
 		}
 		result = mapper.writeValueAsString(fieldNameRepository.save(field));
